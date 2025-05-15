@@ -26,15 +26,14 @@ struct ButtonFilterView: View {
 
     var body: some View {
         Button {
-            selectedFilter = text
+            if isSelected {
+                selectedFilter = "All"
+            } else{
+                selectedFilter = text
+            }
         } label: {
             Text("🍽️ \(text)")
-                .foregroundColor(.white)
-                .padding(8)
-                .background(
-                    RoundedRectangle(cornerRadius: 25)
-                        .fill(isSelected ? .blue.opacity(0.7) : .gray)
-                )
+                .selectableButton(color: .blue, secondaryColor: .gray, isSelected: isSelected)
         }
     }
 }

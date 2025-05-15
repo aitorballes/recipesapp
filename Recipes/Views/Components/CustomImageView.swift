@@ -26,7 +26,7 @@ struct CustomImageView: View {
                     .clipped()
                     .cornerRadius(10)
             case .failure(_):
-                Image(systemName: "photo")
+                Image(systemName: "photo.circle")
                     .resizable()
                     .aspectRatio(contentMode: contentMode)
                     .frame(height: size)

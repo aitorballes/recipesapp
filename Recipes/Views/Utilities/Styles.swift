@@ -1,4 +1,5 @@
 import SwiftUI
+// MARK: BUTTONS
 
 struct StrokedButtonStyle: ButtonStyle {
     @State private var isAnimating = false
@@ -33,5 +34,27 @@ struct StrokedButtonStyle: ButtonStyle {
                         .stroke(colorScheme == .light ? .black : .white, lineWidth: 3)
                 }
             }
+    }
+}
+
+struct SelectableButtonModifier: ViewModifier {
+    var color: Color
+    var secondaryColor: Color
+    var isSelected: Bool
+
+    func body(content: Content) -> some View {
+        content
+            .foregroundColor(.white)
+            .padding(8)
+            .background(
+                RoundedRectangle(cornerRadius: 25)
+                    .fill(isSelected ? color.opacity(0.7) : secondaryColor.opacity(0.7))
+            )
+    }
+}
+
+extension View {
+    func selectableButton(color: Color, secondaryColor: Color, isSelected: Bool) -> some View {
+        self.modifier(SelectableButtonModifier(color: color ,secondaryColor: secondaryColor , isSelected: isSelected))
     }
 }

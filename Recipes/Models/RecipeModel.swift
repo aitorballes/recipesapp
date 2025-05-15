@@ -13,4 +13,7 @@ struct RecipeModel: Codable, Identifiable, Hashable {
     let image: URL
     let rating: Double
     let mealType: [String]
+    
+    var isFavorite: Bool = false
+    var isSaved: Bool = false
 }

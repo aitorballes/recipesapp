@@ -1,11 +1,11 @@
 import SwiftUI
 
-enum StorageKeys: String {
-    case showContenTabView
+enum AppStorageKeys {
+    static let showContenTabView = "showContentTabView"
 }
 
 struct WelcomeView: View {
-    @AppStorage(StorageKeys.showContenTabView.rawValue) private var showContentTabView = false
+    @AppStorage(AppStorageKeys.showContenTabView) private var showContentTabView = false
 
     var body: some View {
 

@@ -5,6 +5,7 @@ import Observation
 final class RecipesViewModel {
     private let repository: RecipesRepositoryProtocol
     var recipes: [RecipeModel] = []
+    private var recipes: [RecipeModel] = []
 
     var cuisineTypes: [String] {
        ["All"] + Array(Set(recipes.map(\.cuisine))).sorted()
@@ -41,5 +42,23 @@ final class RecipesViewModel {
         } catch {
             print("Error: \(error.localizedDescription)")
         }
+    }
+
+    func saveRecipe(_ recipeId: Int) {
+        guard let index = recipes.firstIndex(where: { $0.id == recipeId })
+        else {
+            return
+        }
+        
+        recipes[index].isSaved.toggle()
+    }
+    
+    func favRecipe(_ recipeId: Int) {
+        guard let index = recipes.firstIndex(where: { $0.id == recipeId })
+        else {
+            return
+        }
+        
+        recipes[index].isFavorite.toggle()
     }
 }

@@ -4,10 +4,10 @@ struct RecipeRowView: View {
     let recipe: RecipeModel
     
     var body: some View {
-        HStack (alignment: .top){
+        HStack (alignment: .top, spacing: 10) {
             CustomImageView(imageUrl: recipe.image)
             
-            VStack (alignment: .leading) {
+            VStack (alignment: .leading, spacing: 10) {
                 Text(recipe.name)
                     .font(.headline)
                     .fontWeight(.bold)
@@ -15,6 +15,18 @@ struct RecipeRowView: View {
                 Text("⏲ \(recipe.cookTimeMinutes) min | 🍽 \(recipe.servings) portions")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
+                
+                HStack {
+                    if recipe.isSaved {
+                        Image(systemName: "bookmark.fill")
+                            .foregroundStyle(.blue)
+                    }
+                    
+                    if recipe.isFavorite {
+                        Image(systemName: "heart.fill")
+                            .foregroundStyle(.red)
+                    }
+                }               
             }
         }
     }
