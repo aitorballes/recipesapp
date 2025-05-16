@@ -1,4 +1,5 @@
 import Foundation
+import SwiftData
 
 struct RecipeModel: Codable, Identifiable, Hashable {
     let id: Int
@@ -16,4 +17,18 @@ struct RecipeModel: Codable, Identifiable, Hashable {
     
     var isFavorite: Bool = false
     var isSaved: Bool = false
+}
+
+extension RecipeModel {
+    func toEntity() -> RecipeEntity {
+        return .init(
+            id: self.id,
+            name: self.name,
+            prepTimeMinutes: self.prepTimeMinutes,
+            cuisine: self.cuisine,
+            difficulty: self.difficulty,
+            image: self.image,
+            rating: self.rating
+        )
+    }
 }

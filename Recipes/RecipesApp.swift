@@ -1,13 +1,19 @@
 import SwiftUI
+import SwiftData
 
 @main
 struct RecipesApp: App {
-    @State private var viewModel = RecipesViewModel()
+    
+    let modelContainer: ModelContainer = {
+        let configuration = ModelConfiguration()
+        return try! ModelContainer(for: RecipeEntity.self, configurations: configuration)
+    }()
+            
     
     var body: some Scene {
         WindowGroup {
             WelcomeView()
-                .environment(viewModel)
         }
+        .modelContainer(modelContainer)
     }
 }

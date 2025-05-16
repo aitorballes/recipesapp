@@ -2,7 +2,7 @@ import SwiftUI
 
 struct RecipesView: View {
     @Environment(RecipesViewModel.self) var viewModel: RecipesViewModel
-    @State private var isFiltersOpen = false
+    @State private var isFiltersOpen = false    
 
     var body: some View {
         @Bindable var viewModelBindable: RecipesViewModel = viewModel
@@ -21,20 +21,13 @@ struct RecipesView: View {
                                 Button {
                                     viewModel.favRecipe(recipe.id)
                                 } label: {
-                                    Label(
-                                        "Favorite",
-                                        systemImage: recipe.isFavorite
-                                            ? "heart.slash.fill" : "heart.fill")
+                                    Label("Favorite", systemImage: recipe.isFavorite ? "heart.slash.fill" : "heart.fill")
                                 }
                                 .tint(.red)
                                 Button {
                                     viewModel.saveRecipe(recipe.id)
                                 } label: {
-                                    Label(
-                                        "Save",
-                                        systemImage: recipe.isSaved
-                                            ? "bookmark.slash.fill"
-                                            : "bookmark.fill")
+                                    Label("Save", systemImage: recipe.isSaved ? "bookmark.slash.fill" : "bookmark.fill")
                                 }
                                 .tint(.blue)
                             }
@@ -54,9 +47,7 @@ struct RecipesView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        withAnimation {
-                            isFiltersOpen.toggle()
-                        }
+                        isFiltersOpen.toggle()
                     } label: {
                         Image(systemName: "slider.vertical.3")
                             .imageScale(.large)

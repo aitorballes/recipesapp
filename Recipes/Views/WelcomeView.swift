@@ -36,5 +36,4 @@ struct WelcomeView: View {
 
 #Preview {
     WelcomeView()
-        .testEnvironment()
 }

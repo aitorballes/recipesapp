@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import SwiftData
 
 struct RecipesRepositoryTest: RecipesRepositoryProtocol {
     func getRecipes() throws -> [RecipeModel] {
@@ -24,9 +25,20 @@ struct RecipesRepositoryTest: RecipesRepositoryProtocol {
     }
 }
 
+extension ModelContainer {
+    static var preview: ModelContainer {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try! ModelContainer(for: RecipeEntity.self, configurations: config)
+        return container
+    }
+}
+
+
 extension View {
     func testEnvironment() -> some View {
-        self.environment(RecipesViewModel(repository: RecipesRepositoryTest()))
+        let modelContext = ModelContainer.preview.mainContext
+        let testRepository = RecipesRepositoryTest()
+        return self.environment(RecipesViewModel(repository: testRepository, modelContext: modelContext))
     }
 }
 

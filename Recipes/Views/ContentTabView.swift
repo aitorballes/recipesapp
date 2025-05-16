@@ -1,12 +1,15 @@
 import SwiftUI
+import SwiftData
 
 struct ContentTabView: View {
+    @Environment(\.modelContext) private var modelContext
     
     var body: some View {
         
             TabView {
                 Tab("Recipes", systemImage: "fork.knife") {
-                    RecipesView()                       
+                    RecipesView()
+                        .environment(RecipesViewModel(modelContext:modelContext))
                 }
                 Tab("Saved", systemImage: "bookmark.fill") {
 
