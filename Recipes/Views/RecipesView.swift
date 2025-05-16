@@ -2,13 +2,16 @@ import SwiftUI
 
 struct RecipesView: View {
     @Environment(RecipesViewModel.self) var viewModel: RecipesViewModel
+    @State private var isFiltersOpen = false
 
     var body: some View {
         @Bindable var viewModelBindable: RecipesViewModel = viewModel
         NavigationStack {
-            FiltersView(
-                filters: viewModel.cuisineTypes,
-                selectedFilter: $viewModelBindable.selectedCuisineType)
+            if isFiltersOpen {
+                FiltersView(
+                    filters: viewModel.cuisineTypes,
+                    selectedFilter: $viewModelBindable.selectedCuisineType)
+            }
 
             List {
                 ForEach(viewModel.filteredRecipes) { recipe in
@@ -18,19 +21,27 @@ struct RecipesView: View {
                                 Button {
                                     viewModel.favRecipe(recipe.id)
                                 } label: {
-                                    Label("Favorite", systemImage: "heart.fill")
+                                    Label(
+                                        "Favorite",
+                                        systemImage: recipe.isFavorite
+                                            ? "heart.slash.fill" : "heart.fill")
                                 }
                                 .tint(.red)
                                 Button {
                                     viewModel.saveRecipe(recipe.id)
                                 } label: {
-                                    Label("Save", systemImage: "bookmark.fill")
+                                    Label(
+                                        "Save",
+                                        systemImage: recipe.isSaved
+                                            ? "bookmark.slash.fill"
+                                            : "bookmark.fill")
                                 }
                                 .tint(.blue)
                             }
                     }
                 }
             }
+            .scrollIndicators(.hidden)
             .listStyle(.plain)
             .searchable(
                 text: $viewModelBindable.searchText, placement: .automatic,
@@ -39,6 +50,19 @@ struct RecipesView: View {
             .navigationTitle("Recipes")
             .navigationDestination(for: RecipeModel.self) { recipe in
                 RecipeDetailView(recipe: recipe)
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        withAnimation {
+                            isFiltersOpen.toggle()
+                        }
+                    } label: {
+                        Image(systemName: "slider.vertical.3")
+                            .imageScale(.large)
+                            .tint(.primary)
+                    }
+                }
             }
         }
     }

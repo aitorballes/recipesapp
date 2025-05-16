@@ -9,10 +9,12 @@ struct FiltersView: View {
             HStack(spacing: 10) {
                 ForEach(filters, id: \.self) { filter in
                     ButtonFilterView(text: filter, selectedFilter: $selectedFilter)
+                        .scrollTargetLayout()
                 }
             }
             .padding()
         }
+        .scrollTargetBehavior(.viewAligned)
     }
 }
 

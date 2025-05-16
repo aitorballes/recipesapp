@@ -4,7 +4,6 @@ import Observation
 @Observable
 final class RecipesViewModel {
     private let repository: RecipesRepositoryProtocol
-    var recipes: [RecipeModel] = []
     private var recipes: [RecipeModel] = []
 
     var cuisineTypes: [String] {
