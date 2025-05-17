@@ -25,23 +25,6 @@ struct RecipesRepositoryTest: RecipesRepositoryProtocol {
     }
 }
 
-extension ModelContainer {
-    static var preview: ModelContainer {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try! ModelContainer(for: RecipeEntity.self, configurations: config)
-        return container
-    }
-}
-
-
-extension View {
-    func testEnvironment() -> some View {
-        let modelContext = ModelContainer.preview.mainContext
-        let testRepository = RecipesRepositoryTest()
-        return self.environment(RecipesViewModel(repository: testRepository, modelContext: modelContext))
-    }
-}
-
 extension RecipeModel {
     static var testData: RecipeModel {
         .init(

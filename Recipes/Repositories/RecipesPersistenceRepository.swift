@@ -1,35 +1,65 @@
-import SwiftData
 import Foundation
+import SwiftData
 
 protocol RecipesPersistenceRepositoryProtocol {
-    func save(_ recipe: RecipeModel) throws
+
+    func importAll(_ recipesRepository: RecipesRepositoryProtocol) throws
     
-    func delete(_ recipe: RecipeModel) throws
-    
-    func fetchAll() throws -> [RecipeEntity]
+    func fetchRecipe(by id: Int) throws -> RecipeModel?
+
+    func fetchAll() throws -> [RecipeModel]
+
+    func toggleFavorite(for recipeId: Int) throws
+
+    func toggleSaved(for recipeId: Int) throws
+
 }
 
 struct RecipesPersistenceRepository: RecipesPersistenceRepositoryProtocol {
     let modelContext: ModelContext
-    
-    func save(_ recipe: RecipeModel) throws {
-        let entity = recipe.toEntity()
-        modelContext.insert(entity)
-        
-        try modelContext.save()
-    }
-    
-    func delete(_ recipe: RecipeModel) throws {
-        let fetchDescriptor = FetchDescriptor<RecipeEntity>(predicate: #Predicate { $0.id == recipe.id })
-        if let entity = try modelContext.fetch(fetchDescriptor).first {
-            modelContext.delete(entity)
-            try modelContext.save()
+
+    func importAll(_ recipesRepository: RecipesRepositoryProtocol) throws {
+        let recipes = try recipesRepository.getRecipes()
+        recipes.forEach { recipe in
+            modelContext.insert(recipe)
         }
     }
     
-    func fetchAll() throws -> [RecipeEntity] {
-        let fetchDescriptor = FetchDescriptor<RecipeEntity>()
-        return try modelContext.fetch(fetchDescriptor)
-    }    
-}
+    func fetchRecipe(by id: Int) throws -> RecipeModel? {
+        let fetchDescriptor = FetchDescriptor<RecipeModel>(
+            predicate: #Predicate { $0.id == id }
+        )
 
+        return try modelContext.fetch(fetchDescriptor).first
+    }
+
+
+    func fetchAll() throws -> [RecipeModel] {
+        let fetchDescriptor = FetchDescriptor<RecipeModel>(sortBy: [
+            SortDescriptor(\.name, order: .forward)
+        ])
+
+        return try modelContext.fetch(fetchDescriptor)
+    }
+
+    func toggleFavorite(for recipeId: Int) throws {
+        try toggleAttribute(for: recipeId, keyPath: \.isFavorite)
+    }
+
+    func toggleSaved(for recipeId: Int) throws {
+        try toggleAttribute(for: recipeId, keyPath: \.isSaved)
+    }
+
+    private func toggleAttribute(for recipeId: Int, keyPath: ReferenceWritableKeyPath<RecipeModel, Bool>) throws {
+        let fetchDescriptor = FetchDescriptor<RecipeModel>(
+            predicate: #Predicate { $0.id == recipeId }
+        )
+
+        guard let recipe = try modelContext.fetch(fetchDescriptor).first else {
+            throw NSError(domain: "Recipe not found", code: 404, userInfo: nil)
+        }
+
+        recipe[keyPath: keyPath].toggle()
+        try modelContext.save()
+    }
+}
