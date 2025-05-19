@@ -19,6 +19,8 @@ final class RecipesViewModel {
     
     var hasNoRecipes = false
     
+    var hasNoSavedRecipes = false
+    
     var filteredRecipes: [RecipeModel] {
         var result = recipes
         
@@ -44,6 +46,15 @@ final class RecipesViewModel {
         
         return result
     }
+    
+    var savedRecipes: [RecipeModel] {
+        let result = recipes.filter { $0.isSaved }
+        
+        hasNoSavedRecipes = result.isEmpty
+         
+        return result
+    }
+
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext

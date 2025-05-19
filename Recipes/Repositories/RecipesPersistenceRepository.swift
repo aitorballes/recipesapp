@@ -8,6 +8,8 @@ protocol RecipesPersistenceRepositoryProtocol {
     func fetchRecipe(by id: Int) throws -> RecipeModel?
 
     func fetchAll() throws -> [RecipeModel]
+    
+    func fetchAllSaved() throws -> [RecipeModel]
 
     func toggleFavorite(for recipeId: Int) throws
 
@@ -41,6 +43,16 @@ struct RecipesPersistenceRepository: RecipesPersistenceRepositoryProtocol {
 
         return try modelContext.fetch(fetchDescriptor)
     }
+    
+    func fetchAllSaved() throws -> [RecipeModel] {
+        let fetchDescriptor = FetchDescriptor<RecipeModel>(
+            predicate: #Predicate { $0.isSaved == true },
+            sortBy: [SortDescriptor(\.name, order: .forward)]
+        )
+
+        return try modelContext.fetch(fetchDescriptor)
+    }
+
 
     func toggleFavorite(for recipeId: Int) throws {
         try toggleAttribute(for: recipeId, keyPath: \.isFavorite)

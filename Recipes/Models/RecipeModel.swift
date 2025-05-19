@@ -3,13 +3,13 @@ import Foundation
 
 extension String {
     var toArray: [String] {
-        self.isEmpty ? [] : self.components(separatedBy: ",")
+        self.isEmpty ? [] : self.components(separatedBy: "|")
     }
 }
 
 extension Array where Element == String {
     var toSerializedString: String {
-        self.joined(separator: ",")
+        self.joined(separator: "|")
     }
 }
 
