@@ -53,8 +53,26 @@ struct RecipesView: View {
                             .imageScale(.large)
                             .tint(.primary)
                     }
+                    
+                }
+                
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        viewModelBindable.showFavorites.toggle()
+                    } label: {
+                        Image(systemName: viewModelBindable.showFavorites ? "heart" : "heart.fill")
+                            .imageScale(.large)
+                            .tint(.primary)
+                    }
                 }
             }
+            .overlay {
+                if viewModel.hasNoRecipes {
+                    ContentUnavailableView("No Recipes", systemImage: "fork.knife.circle.fill", description: Text("There is no recipes available. Please try to modify the filters."))
+                        
+                }
+            }
+            
         }
     }
 }

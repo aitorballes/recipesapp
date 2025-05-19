@@ -7,30 +7,42 @@ final class RecipesViewModel {
     private let repository: RecipesPersistenceRepositoryProtocol
     private let modelContext: ModelContext
     private var recipes: [RecipeModel] = []
-
+    
     var cuisineTypes: [String] {
         ["All"] + Array(Set(recipes.map(\.cuisine))).sorted()
     }
     var selectedCuisineType: String = "All"
-
+    
     var searchText = ""
-
+    
+    var showFavorites = false
+    
+    var hasNoRecipes = false
+    
     var filteredRecipes: [RecipeModel] {
         var result = recipes
-
+        
         if !searchText.isEmpty {
             result = result.filter {
                 $0.name.localizedStandardContains(searchText)
             }
         }
-
+        
         let hasMatches = result.contains {
             $0.cuisine.contains(selectedCuisineType)
         }
-
-        return hasMatches
-            ? result.filter { $0.cuisine.contains(selectedCuisineType) }
-            : result
+        
+        if showFavorites {
+            result = result.filter { $0.isFavorite }
+        }
+        
+        result = hasMatches
+        ? result.filter { $0.cuisine.contains(selectedCuisineType) }
+        : result
+        
+        hasNoRecipes = result.isEmpty
+        
+        return result
     }
 
     init(modelContext: ModelContext) {
