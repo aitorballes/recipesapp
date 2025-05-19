@@ -1,19 +1,35 @@
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 @main
 struct RecipesApp: App {
-    
-    let modelContainer: ModelContainer = {
-        let configuration = ModelConfiguration()
-        return try! ModelContainer(for: RecipeEntity.self, configurations: configuration)
-    }()
-            
-    
+
+    //    let modelContainer: ModelContainer = {
+    //        let configuration = ModelConfiguration()
+    //        return try! ModelContainer(for: RecipeModel.self, configurations: configuration)
+    //    }()
+
     var body: some Scene {
         WindowGroup {
             WelcomeView()
         }
-        .modelContainer(modelContainer)
+        .modelContainer(for: RecipeModel.self) { result in
+            guard case .success(let container) = result else {
+                return
+            }
+
+            let repository = RecipesPersistenceRepository(
+                modelContext: container.mainContext)
+            guard (try? repository.fetchAll().first?.name == nil) ?? false else {
+                return
+            }
+
+            do {
+                try repository.importAll(RecipesRepository())
+            } catch {
+                print("Error importing recipes: \(error)")
+            }
+
+        }
     }
 }

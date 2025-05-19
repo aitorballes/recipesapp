@@ -4,8 +4,7 @@ import SwiftData
 
 @Observable
 final class RecipesViewModel {
-    private let repository: RecipesRepositoryProtocol
-    private let persistenceRepository: RecipesPersistenceRepositoryProtocol
+    private let repository: RecipesPersistenceRepositoryProtocol
     private let modelContext: ModelContext
     private var recipes: [RecipeModel] = []
 
@@ -34,57 +33,46 @@ final class RecipesViewModel {
             : result
     }
 
-    init(
-        repository: RecipesRepositoryProtocol = RecipesRepository(), modelContext: ModelContext
-    ) {
-        self.repository = repository
+    init(modelContext: ModelContext) {
         self.modelContext = modelContext
         
-        persistenceRepository = RecipesPersistenceRepository(modelContext: modelContext)
+        repository = RecipesPersistenceRepository(modelContext: modelContext)
         getRecipes()
     }
 
     func getRecipes() {
         do {
-            recipes = try repository.getRecipes()
-
+            recipes = try repository.fetchAll()
         } catch {
             print("Error: \(error.localizedDescription)")
         }
     }
 
     func saveRecipe(_ recipeId: Int) {
-        guard let index = recipes.firstIndex(where: { $0.id == recipeId })
-        else {
-            return
-        }
-
-        recipes[index].isSaved.toggle()
-
         do {
-            if recipes[index].isSaved {
-                try persistenceRepository.save(recipes[index])
-            } else {
-                try persistenceRepository.delete(recipes[index])
+            try repository.toggleSaved(for: recipeId)
+            
+            if let updatedRecipe = try repository.fetchRecipe(by: recipeId),
+               let index = recipes.firstIndex(where: { $0.id == recipeId }) {
+                recipes[index] = updatedRecipe
             }
             
-            let savedRecipes = try persistenceRepository.fetchAll()
-            
-            print("Saved recipes: \(savedRecipes.first?.name ?? "")")
         } catch {
-            print("Persistence error: \(error.localizedDescription)")
+            print("Error saving recipe: \(error.localizedDescription)")
         }
-        
-       
-
     }
-
+    
     func favRecipe(_ recipeId: Int) {
-        guard let index = recipes.firstIndex(where: { $0.id == recipeId })
-        else {
-            return
+        do {
+            try repository.toggleFavorite(for: recipeId)
+            
+            if let updatedRecipe = try repository.fetchRecipe(by: recipeId),
+               let index = recipes.firstIndex(where: { $0.id == recipeId }) {
+                recipes[index] = updatedRecipe  
+            }
+            
+        } catch {
+            print("Error saving recipe: \(error.localizedDescription)")
         }
-
-        recipes[index].isFavorite.toggle()
     }
 }
