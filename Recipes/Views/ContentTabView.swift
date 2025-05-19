@@ -19,6 +19,8 @@ struct ContentTabView: View {
 
                 }
                 Tab("Timer", systemImage: "timer") {
+                    TimerView()
+                        .environment(TimerViewModel())
                 }
             }
         
