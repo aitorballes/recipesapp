@@ -28,7 +28,7 @@ struct SavedRecipesView: View {
                 RecipeDetailView(recipe: recipe)
             }
             .overlay {
-                if viewModel.hasNoRecipes {
+                if viewModel.hasNoSavedRecipes {
                     ContentUnavailableView(
                         "No Recipes", systemImage: "bookmark.slash.fill",
                         description: Text(

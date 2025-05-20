@@ -63,11 +63,7 @@ struct RecipesPersistenceRepository: RecipesPersistenceRepositoryProtocol {
     }
 
     private func toggleAttribute(for recipeId: Int, keyPath: ReferenceWritableKeyPath<RecipeModel, Bool>) throws {
-        let fetchDescriptor = FetchDescriptor<RecipeModel>(
-            predicate: #Predicate { $0.id == recipeId }
-        )
-
-        guard let recipe = try modelContext.fetch(fetchDescriptor).first else {
+        guard let recipe = try fetchRecipe(by: recipeId) else {
             throw NSError(domain: "Recipe not found", code: 404, userInfo: nil)
         }
 
