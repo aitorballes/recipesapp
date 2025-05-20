@@ -2,12 +2,11 @@ import SwiftUI
 
 struct RecipesView: View {
     @Environment(RecipesViewModel.self) var viewModel: RecipesViewModel
-    @State private var isFiltersOpen = false    
 
     var body: some View {
         @Bindable var viewModelBindable: RecipesViewModel = viewModel
         NavigationStack {
-            if isFiltersOpen {
+            if viewModelBindable.isFilterOpen {
                 FiltersView(
                     filters: viewModel.cuisineTypes,
                     selectedFilter: $viewModelBindable.selectedCuisineType)
@@ -47,7 +46,9 @@ struct RecipesView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        isFiltersOpen.toggle()
+                        
+                        viewModelBindable.isFilterOpen.toggle()
+                        
                     } label: {
                         Image(systemName: "slider.vertical.3")
                             .imageScale(.large)

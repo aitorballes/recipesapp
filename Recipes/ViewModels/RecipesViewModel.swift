@@ -47,6 +47,8 @@ final class RecipesViewModel {
         return result
     }
     
+    var isFilterOpen = false
+    
     var savedRecipes: [RecipeModel] {
         let result = recipes.filter { $0.isSaved }
         
