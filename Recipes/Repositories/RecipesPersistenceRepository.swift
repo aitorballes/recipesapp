@@ -2,19 +2,11 @@ import Foundation
 import SwiftData
 
 protocol RecipesPersistenceRepositoryProtocol {
-
     func importAll(_ recipesRepository: RecipesRepositoryProtocol) throws
-    
-    func fetchRecipe(by id: Int) throws -> RecipeModel?
-
     func fetchAll() throws -> [RecipeModel]
-    
     func fetchAllSaved() throws -> [RecipeModel]
-
-    func toggleFavorite(for recipeId: Int) throws
-
-    func toggleSaved(for recipeId: Int) throws
-
+    func toggleFavorite(_ recipe: RecipeModel) throws
+    func toggleSaved(_ recipe: RecipeModel) throws
 }
 
 struct RecipesPersistenceRepository: RecipesPersistenceRepositoryProtocol {
@@ -26,15 +18,6 @@ struct RecipesPersistenceRepository: RecipesPersistenceRepositoryProtocol {
             modelContext.insert(recipe)
         }
     }
-    
-    func fetchRecipe(by id: Int) throws -> RecipeModel? {
-        let fetchDescriptor = FetchDescriptor<RecipeModel>(
-            predicate: #Predicate { $0.id == id }
-        )
-
-        return try modelContext.fetch(fetchDescriptor).first
-    }
-
 
     func fetchAll() throws -> [RecipeModel] {
         let fetchDescriptor = FetchDescriptor<RecipeModel>(sortBy: [
@@ -54,19 +37,15 @@ struct RecipesPersistenceRepository: RecipesPersistenceRepositoryProtocol {
     }
 
 
-    func toggleFavorite(for recipeId: Int) throws {
-        try toggleAttribute(for: recipeId, keyPath: \.isFavorite)
+    func toggleFavorite(_ recipe: RecipeModel) throws {
+        try toggleAttribute(for: recipe, keyPath: \.isFavorite)
     }
 
-    func toggleSaved(for recipeId: Int) throws {
-        try toggleAttribute(for: recipeId, keyPath: \.isSaved)
+    func toggleSaved(_ recipe: RecipeModel) throws {
+        try toggleAttribute(for: recipe, keyPath: \.isSaved)
     }
 
-    private func toggleAttribute(for recipeId: Int, keyPath: ReferenceWritableKeyPath<RecipeModel, Bool>) throws {
-        guard let recipe = try fetchRecipe(by: recipeId) else {
-            throw NSError(domain: "Recipe not found", code: 404, userInfo: nil)
-        }
-
+    private func toggleAttribute(for recipe: RecipeModel, keyPath: ReferenceWritableKeyPath<RecipeModel, Bool>) throws {        
         recipe[keyPath: keyPath].toggle()
         try modelContext.save()
     }

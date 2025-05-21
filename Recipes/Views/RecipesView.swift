@@ -18,13 +18,13 @@ struct RecipesView: View {
                         RecipeRowView(recipe: recipe)
                             .swipeActions(edge: .trailing) {
                                 Button {
-                                    viewModel.favRecipe(recipe.id)
+                                    viewModel.favRecipe(recipe)
                                 } label: {
                                     Label("Favorite", systemImage: recipe.isFavorite ? "heart.slash.fill" : "heart.fill")
                                 }
                                 .tint(.red)
                                 Button {
-                                    viewModel.saveRecipe(recipe.id)
+                                    viewModel.saveRecipe(recipe)
                                 } label: {
                                     Label("Save", systemImage: recipe.isSaved ? "bookmark.slash.fill" : "bookmark.fill")
                                 }
@@ -68,7 +68,7 @@ struct RecipesView: View {
                 }
             }
             .overlay {
-                if viewModel.hasNoRecipes {
+                if viewModel.filteredRecipes.isEmpty {
                     ContentUnavailableView("No Recipes", systemImage: "fork.knife.circle.fill", description: Text("There is no recipes available. Please try to modify the filters."))
                         
                 }

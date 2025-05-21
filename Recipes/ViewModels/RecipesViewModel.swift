@@ -8,18 +8,14 @@ final class RecipesViewModel {
     private let modelContext: ModelContext
     private var recipes: [RecipeModel] = []
     
+    var selectedCuisineType: String = "All"
+    var searchText = ""
+    var showFavorites = false
+    var isFilterOpen = false
+    
     var cuisineTypes: [String] {
         ["All"] + Array(Set(recipes.map(\.cuisine))).sorted()
     }
-    var selectedCuisineType: String = "All"
-    
-    var searchText = ""
-    
-    var showFavorites = false
-    
-    var hasNoRecipes = false
-    
-    var hasNoSavedRecipes = false
     
     var filteredRecipes: [RecipeModel] {
         var result = recipes
@@ -38,25 +34,14 @@ final class RecipesViewModel {
             result = result.filter { $0.isFavorite }
         }
         
-        result = hasMatches
+        return hasMatches
         ? result.filter { $0.cuisine.contains(selectedCuisineType) }
         : result
-        
-        hasNoRecipes = result.isEmpty
-        
-        return result
     }
-    
-    var isFilterOpen = false
     
     var savedRecipes: [RecipeModel] {
-        let result = recipes.filter { $0.isSaved }
-        
-        hasNoSavedRecipes = result.isEmpty
-         
-        return result
+        recipes.filter { $0.isSaved }
     }
-
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
@@ -73,29 +58,18 @@ final class RecipesViewModel {
         }
     }
 
-    func saveRecipe(_ recipeId: Int) {
+    func saveRecipe(_ recipe: RecipeModel) {
         do {
-            try repository.toggleSaved(for: recipeId)
-            
-            if let updatedRecipe = try repository.fetchRecipe(by: recipeId),
-               let index = recipes.firstIndex(where: { $0.id == recipeId }) {
-                recipes[index] = updatedRecipe
-            }
+            try repository.toggleSaved(recipe)
             
         } catch {
             print("Error saving recipe: \(error.localizedDescription)")
         }
     }
     
-    func favRecipe(_ recipeId: Int) {
+    func favRecipe(_ recipe: RecipeModel) {
         do {
-            try repository.toggleFavorite(for: recipeId)
-            
-            if let updatedRecipe = try repository.fetchRecipe(by: recipeId),
-               let index = recipes.firstIndex(where: { $0.id == recipeId }) {
-                recipes[index] = updatedRecipe  
-            }
-            
+            try repository.toggleFavorite(recipe)        
         } catch {
             print("Error saving recipe: \(error.localizedDescription)")
         }

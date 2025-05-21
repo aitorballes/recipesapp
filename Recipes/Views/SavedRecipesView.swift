@@ -12,7 +12,7 @@ struct SavedRecipesView: View {
                         RecipeRowView(recipe: recipe)
                             .swipeActions(edge: .trailing) {
                                 Button {
-                                    viewModel.saveRecipe(recipe.id)
+                                    viewModel.saveRecipe(recipe)
                                 } label: {
                                     Label("Unsave",systemImage: "bookmark.slash.fill")
                                 }
@@ -28,7 +28,7 @@ struct SavedRecipesView: View {
                 RecipeDetailView(recipe: recipe)
             }
             .overlay {
-                if viewModel.hasNoSavedRecipes {
+                if viewModel.savedRecipes.isEmpty {
                     ContentUnavailableView(
                         "No Recipes", systemImage: "bookmark.slash.fill",
                         description: Text(
