@@ -1,8 +1,7 @@
 import SwiftData
-import Foundation
 
 @Model
-final class ItemModel: Identifiable {
+final class ItemModel {
     @Attribute(.unique) var id: Int
     var name: String
     var icon: String

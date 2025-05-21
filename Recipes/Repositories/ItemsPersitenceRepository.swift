@@ -2,30 +2,21 @@ import SwiftData
 import Foundation
 
 protocol ItemsPersistenceRepositoryProtocol {
-    func fetchAll() throws -> [ItemModel]
-    func insert(_ itemName: String) throws -> ItemModel
+   
+    func insert(_ itemName: String) throws
     func delete(_ item: ItemModel) throws
     func markAsDeleted(_ item: ItemModel) throws
     func restore(_ item: ItemModel) throws
 }
 
 struct ItemsPersistenceRepository: ItemsPersistenceRepositoryProtocol {
-    let modelContext: ModelContext
+    let modelContext: ModelContext    
 
-    func fetchAll() throws -> [ItemModel] {
-        let fetchDescriptor = FetchDescriptor<ItemModel>(sortBy: [
-            SortDescriptor(\.id, order: .forward)
-        ])
-        return try modelContext.fetch(fetchDescriptor)
-    }
-
-    func insert(_ itemName: String) throws -> ItemModel {
-        let allItems = try fetchAll()
-        let maxID = allItems.map(\.id).max() ?? 0
+    func insert(_ itemName: String) throws  {
+        let maxID = try getMaxId()
         let newItem = ItemModel(id: maxID + 1, name: itemName)
         modelContext.insert(newItem)
         try modelContext.save()
-        return newItem
     }
 
     func delete(_ item: ItemModel) throws {        
@@ -44,5 +35,10 @@ struct ItemsPersistenceRepository: ItemsPersistenceRepositoryProtocol {
         
         item.isErased = false
         try modelContext.save()
+    }
+    
+    private func getMaxId() throws -> Int {
+        let fetchDescriptor = FetchDescriptor<ItemModel>()
+        return try modelContext.fetch(fetchDescriptor).map(\.id).max() ?? 0
     }
 }

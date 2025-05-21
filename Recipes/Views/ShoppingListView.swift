@@ -1,8 +1,9 @@
 import SwiftUI
+import SwiftData
 
 struct ShoppingListView: View {
-    @Environment(ShoppingListViewModel.self) private var viewModel:
-        ShoppingListViewModel
+    @Environment(ShoppingListViewModel.self) private var viewModel: ShoppingListViewModel
+    @Query(sort: [SortDescriptor(\ItemModel.id, order: .reverse)]) private var items: [ItemModel]
 
     var body: some View {
         @Bindable var viewModelBindable: ShoppingListViewModel = viewModel
@@ -21,7 +22,7 @@ struct ShoppingListView: View {
             .padding()
 
             List {
-                ForEach(viewModel.sortedItems) { item in
+                ForEach(items) { item in
                     Text("\(item.name) \(item.icon)")
                         .strikethrough(item.isErased, color: .secondary)
                         .opacity(item.isErased ? 0.6 : 1)
@@ -50,7 +51,7 @@ struct ShoppingListView: View {
             .listStyle(.plain)
             .navigationTitle("Shopping List")
             .overlay {
-                if viewModel.hasNoItems {
+                if items.isEmpty {
                     ContentUnavailableView(
                         "No Items", systemImage: "carrot.fill",
                         description: Text(
