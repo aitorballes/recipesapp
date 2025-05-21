@@ -5,11 +5,18 @@ import SwiftUI
 extension ModelContainer {
     static var preview: ModelContainer {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try! ModelContainer(for: RecipeModel.self, configurations: config)
-        let repository = RecipesPersistenceRepository(modelContext: container.mainContext)
+        let container = try! ModelContainer(for: RecipeModel.self,ItemModel.self, configurations: config)
+        let recipesRepositoryDB = RecipesPersistenceRepository(modelContext: container.mainContext)
+        let itemsRepositoryDB = ItemsPersistenceRepository(modelContext: container.mainContext)
         
         do {
-            try repository.importAll(RecipesRepositoryTest())
+            // First load test recipes
+            try recipesRepositoryDB.importAll(RecipesRepositoryTest())
+            // First load test items
+            let itemsName = ["Apple", "Banana", "Pizza", "Water"]
+            for itemName in itemsName {
+                try itemsRepositoryDB.insert(itemName)
+            }
         } catch {
             print("Error importing recipes: \(error)")
         }
@@ -24,4 +31,5 @@ extension View {
         return self.environment(RecipesViewModel(modelContext: modelContext))
     }
 }
+
 

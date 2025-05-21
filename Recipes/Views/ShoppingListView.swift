@@ -63,8 +63,3 @@ struct ShoppingListView: View {
         }
     }
 }
-
-//#Preview {
-//    ShoppingListView()
-//        .testEnvironmentItems()
-//}

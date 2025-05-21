@@ -40,7 +40,3 @@ struct SavedRecipesView: View {
         }
     }
 }
-
-#Preview {
-    SavedRecipesView()
-}

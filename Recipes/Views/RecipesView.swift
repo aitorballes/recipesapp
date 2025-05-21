@@ -77,8 +77,3 @@ struct RecipesView: View {
         }
     }
 }
-
-#Preview {
-    RecipesView()
-        .testEnvironment()
-}
