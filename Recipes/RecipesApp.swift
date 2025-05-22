@@ -13,7 +13,7 @@ struct RecipesApp: App {
         WindowGroup {
             WelcomeView()
         }
-        .modelContainer(for: [RecipeModel.self, ItemModel.self]) { result in
+        .modelContainer(for: [RecipeModel.self, ItemModel.self, MealModel.self]) { result in
             guard case .success(let container) = result else {
                 return
             }

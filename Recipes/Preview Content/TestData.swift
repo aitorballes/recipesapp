@@ -53,7 +53,9 @@ extension RecipeModel {
             cuisine: "Italian",
             image: URL(string:"https://cdn.dummyjson.com/recipe-images/2.webp")!,
             rating: 4.5,
-            mealType: ["Dinner", "Lunch"]
+            mealType: ["Dinner", "Lunch"],
+            isFavorite: true,
+            isSaved: true
         )
     }
 

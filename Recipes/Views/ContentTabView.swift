@@ -20,6 +20,10 @@ struct ContentTabView: View {
                     .environment(
                         ShoppingListViewModel(modelContext: modelContext))
             }
+            Tab("Meals Planner", systemImage: "calendar") {
+                MealsView()
+                    .environment(MealsViewModel(modelContext: modelContext))
+            }
             Tab("Timer", systemImage: "timer") {
                 TimerView()
                     .environment(TimerViewModel())

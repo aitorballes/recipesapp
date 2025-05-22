@@ -2,6 +2,12 @@ import SwiftUI
 
 struct RecipeRowView: View {
     let recipe: RecipeModel
+    let date: Date?
+    
+    init(recipe: RecipeModel, date: Date? = nil) {
+        self.recipe = recipe
+        self.date = date
+    }
     
     var body: some View {
         HStack (alignment: .top, spacing: 10) {
@@ -16,17 +22,26 @@ struct RecipeRowView: View {
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
                 
-                HStack {
-                    if recipe.isSaved {
-                        Image(systemName: "bookmark.fill")
-                            .foregroundStyle(.blue)
+                if let date = date {
+                    Text("🗓️ \(date.formatted(.dateTime.day().month().year()))")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                        
+                } else {
+                    HStack {
+                        if recipe.isSaved {
+                            Image(systemName: "bookmark.fill")
+                                .foregroundStyle(.blue)
+                        }
+                        
+                        if recipe.isFavorite {
+                            Image(systemName: "heart.fill")
+                                .foregroundStyle(.red)
+                        }
                     }
-                    
-                    if recipe.isFavorite {
-                        Image(systemName: "heart.fill")
-                            .foregroundStyle(.red)
-                    }
-                }               
+                }
+                
+                             
             }
         }
     }
@@ -34,9 +49,9 @@ struct RecipeRowView: View {
 
 #Preview {
     List {
-        ForEach(0..<3) { _ in
-            RecipeRowView(recipe: .testData)
-        }
+        RecipeRowView(recipe: .testData, date: Date())
+        RecipeRowView(recipe: .testData)
+        RecipeRowView(recipe: .testData, date: Date())
     }
     .listStyle(.plain)
         

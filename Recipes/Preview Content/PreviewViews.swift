@@ -5,7 +5,7 @@ import SwiftUI
 extension ModelContainer {
     static var preview: ModelContainer {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
-        let container = try! ModelContainer(for: RecipeModel.self,ItemModel.self, configurations: config)
+        let container = try! ModelContainer(for: RecipeModel.self,ItemModel.self,MealModel.self, configurations: config)
         let recipesRepositoryDB = RecipesPersistenceRepository(modelContext: container.mainContext)
         let itemsRepositoryDB = ItemsPersistenceRepository(modelContext: container.mainContext)
         
