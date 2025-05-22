@@ -8,10 +8,15 @@ struct RecipesApp: App {
 //            let configuration = ModelConfiguration()
 //            return try! ModelContainer(for: [RecipeModel.self, ItemModel.self], configurations: configuration)
 //        }()
-
+    let hasCompletedWelcome = UserDefaults.standard.bool(forKey: AppStorageKeys.hasCompletedWelcome)
     var body: some Scene {
         WindowGroup {
-            WelcomeView()
+            if hasCompletedWelcome {
+                SplashScreenView()
+            } else{
+                WelcomeView()
+            }
+            
         }
         .modelContainer(for: [RecipeModel.self, ItemModel.self, MealModel.self]) { result in
             guard case .success(let container) = result else {

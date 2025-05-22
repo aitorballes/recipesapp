@@ -1,15 +1,11 @@
 import SwiftUI
 
-enum AppStorageKeys {
-    static let showContenTabView = "showContentTabView"
-}
-
 struct WelcomeView: View {
-    @AppStorage(AppStorageKeys.showContenTabView) private var showContentTabView = false
+    @AppStorage(AppStorageKeys.hasCompletedWelcome) private var hasCompletedWelcome = false
 
     var body: some View {
 
-        if showContentTabView {
+        if hasCompletedWelcome {
             ContentTabView()
         } else {
             VStack(spacing: 20) {
@@ -24,7 +20,7 @@ struct WelcomeView: View {
                     .padding(.bottom)
 
                 Button("Press to continue") {
-                    showContentTabView = true
+                    hasCompletedWelcome = true
                 }
                 .buttonStyle(StrokedButtonStyle())
                 .padding(.top)
