@@ -1,13 +1,14 @@
 import Foundation
 import Observation
-import SwiftData
+import SwiftData    
 
 @Observable
-final class RecipesViewModel {
-    private let repository: RecipesPersistenceRepositoryProtocol
+final class RecipesViewModel: BaseViewModelProtocol {
+    private let repository: any RecipesPersistenceRepositoryProtocol
     private let modelContext: ModelContext
     private var recipes: [RecipeModel] = []
     
+    var state: ViewState = .loading
     var selectedCuisineType: String = "All"
     var searchText = ""
     var showFavorites = false
@@ -47,13 +48,15 @@ final class RecipesViewModel {
         self.modelContext = modelContext
         
         repository = RecipesPersistenceRepository(modelContext: modelContext)
-        getRecipes()
+        getRecipes()      
     }
 
     func getRecipes() {
         do {
             recipes = try repository.fetchAll()
+            state = .loaded
         } catch {
+            state = .error(error)
             print("Error: \(error.localizedDescription)")
         }
     }
@@ -63,6 +66,7 @@ final class RecipesViewModel {
             try repository.toggleSaved(recipe)
             
         } catch {
+            state = .error(error)
             print("Error saving recipe: \(error.localizedDescription)")
         }
     }
@@ -71,6 +75,7 @@ final class RecipesViewModel {
         do {
             try repository.toggleFavorite(recipe)        
         } catch {
+            state = .error(error)
             print("Error saving recipe: \(error.localizedDescription)")
         }
     }

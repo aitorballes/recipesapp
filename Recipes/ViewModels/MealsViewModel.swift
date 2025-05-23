@@ -3,7 +3,7 @@ import SwiftData
 
 @Observable
 final class MealsViewModel {
-    private let repository: MealsPersistenceRepositoryProtocol
+    private let repository: any MealsPersistenceRepositoryProtocol
     private let modelContext: ModelContext
     
     var selectedDate = Date()
@@ -18,7 +18,7 @@ final class MealsViewModel {
     func addMeal(){
         guard let selectedRecipe else { return }
         do {
-            try repository.insert(selectedDate, selectedRecipe)
+            try repository.add(selectedDate, selectedRecipe)
             self.selectedRecipe = nil
         
         } catch {

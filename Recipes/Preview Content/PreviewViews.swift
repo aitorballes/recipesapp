@@ -15,7 +15,7 @@ extension ModelContainer {
             // First load test items
             let itemsName = ["Apple", "Banana", "Pizza", "Water"]
             for itemName in itemsName {
-                try itemsRepositoryDB.insert(itemName)
+                try itemsRepositoryDB.add(itemName)
             }
         } catch {
             print("Error importing recipes: \(error)")

@@ -1,5 +1,11 @@
 import SwiftUI
 
+enum ViewState {
+    case loading
+    case loaded
+    case error(Error)
+}
+
 struct RecipesView: View {
     @Environment(RecipesViewModel.self) var viewModel: RecipesViewModel
 
@@ -72,7 +78,23 @@ struct RecipesView: View {
                     ContentUnavailableView("No Recipes", systemImage: "fork.knife.circle.fill", description: Text("There is no recipes available. Please try to modify the filters."))
                         
                 }
+                
+                if case .loading = viewModel.state {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .padding()
+                }               
+                
             }
+            .alert("Error", isPresented: Binding<Bool>(
+                get: { viewModelBindable.showError },
+                set: { _ in viewModelBindable.state = .loaded }
+              )) {
+                
+            } message: {
+               Text(viewModel.errorMessage)
+            }
+
             
         }
     }

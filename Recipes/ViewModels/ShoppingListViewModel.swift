@@ -3,7 +3,7 @@ import SwiftData
 
 @Observable
 final class ShoppingListViewModel {
-    private let repository: ItemsPersistenceRepositoryProtocol
+    private let repository: any ItemsPersistenceRepositoryProtocol
     private let modelContext: ModelContext
     var newItemName: String = ""
 
@@ -15,7 +15,7 @@ final class ShoppingListViewModel {
     func addItem() {
         guard !newItemName.isEmpty else { return }
         do {
-            try repository.insert(newItemName)            
+            try repository.add(newItemName)
             newItemName = ""
 
         } catch {
