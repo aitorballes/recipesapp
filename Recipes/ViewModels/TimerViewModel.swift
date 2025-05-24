@@ -52,8 +52,8 @@ final class TimerViewModel {
             audioPlayer?.play()
             isAlarmPlaying = true
         } catch {
-            print("Error: \(error.localizedDescription)")
             isAlarmPlaying = false
+            AppLogger.shared.error("Failed to play alarm sound: \(error.localizedDescription)")
         }
     }
     

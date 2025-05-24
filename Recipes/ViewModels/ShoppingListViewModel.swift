@@ -23,7 +23,6 @@ final class ShoppingListViewModel:  BaseViewModelProtocol {
 
         } catch {
             state = .error(error)
-            print("Error adding item: \(error.localizedDescription)")
         }
     }
 
@@ -37,7 +36,6 @@ final class ShoppingListViewModel:  BaseViewModelProtocol {
 
         } catch {
             state = .error(error)
-            print("Error deleting item: \(error.localizedDescription)")
         }
     }
 
@@ -46,7 +44,6 @@ final class ShoppingListViewModel:  BaseViewModelProtocol {
             try repository.restore(item)
         } catch {
             state = .error(error)
-            print("Error restoring item: \(error.localizedDescription)")
         }
     }
 }

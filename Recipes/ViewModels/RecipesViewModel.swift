@@ -57,7 +57,6 @@ final class RecipesViewModel: BaseViewModelProtocol {
             state = .loaded
         } catch {
             state = .error(error)
-            print("Error: \(error.localizedDescription)")
         }
     }
 
@@ -67,7 +66,6 @@ final class RecipesViewModel: BaseViewModelProtocol {
             
         } catch {
             state = .error(error)
-            print("Error saving recipe: \(error.localizedDescription)")
         }
     }
     
@@ -76,7 +74,6 @@ final class RecipesViewModel: BaseViewModelProtocol {
             try repository.toggleFavorite(recipe)        
         } catch {
             state = .error(error)
-            print("Error saving recipe: \(error.localizedDescription)")
         }
     }
 }

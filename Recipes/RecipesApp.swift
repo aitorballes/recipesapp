@@ -31,14 +31,14 @@ struct RecipesApp: App {
     private func firstRecipesLoad(_ modelContainer:ModelContainer) {
         let repository = RecipesPersistenceRepository(
             modelContext: modelContainer.mainContext)
-        guard (try? repository.fetchAll().first?.name == nil) ?? false else {
+        guard (try? repository.fetchCount() == 0) ?? false else {
             return
         }
 
         do {
             try repository.importAll(RecipesRepository())
         } catch {
-            print("Error importing recipes: \(error)")
+            AppLogger.shared.error("Error importing recipes: \(error.localizedDescription)")
         }
     }
 }

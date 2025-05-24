@@ -93,10 +93,3 @@ extension ItemModel {
     }
 }
 
-func printItem(_ description: String, _ item: ItemModel) {
-    print(description)
-    print("Item ID: \(item.id)")
-    print("Item Name: \(item.name)")
-    print("Is Deleted: \(item.isDeleted)")
-}
-

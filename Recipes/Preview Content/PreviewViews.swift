@@ -18,7 +18,7 @@ extension ModelContainer {
                 try itemsRepositoryDB.add(itemName)
             }
         } catch {
-            print("Error importing recipes: \(error)")
+            AppLogger.shared.error("Error loading preview data: \(error.localizedDescription)")
         }
         
         return container

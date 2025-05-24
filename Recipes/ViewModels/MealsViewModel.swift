@@ -25,7 +25,6 @@ final class MealsViewModel: BaseViewModelProtocol {
         
         } catch {
             state = .error(error)
-            print("Error adding meal: \(error.localizedDescription)")
         }
     }
     
@@ -34,7 +33,6 @@ final class MealsViewModel: BaseViewModelProtocol {
             try repository.delete(meal)
         } catch {
             state = .error(error)
-            print("Error deleting meal: \(error.localizedDescription)")
         }
     }
 

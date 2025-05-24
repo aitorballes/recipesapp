@@ -110,7 +110,6 @@ struct MealsView: View {
                             showRecipeSheet = false
                         } label: {
                             HStack {
-
                                 Text(recipe.name)
                                 if viewModel.selectedRecipe == recipe {
                                     Spacer()

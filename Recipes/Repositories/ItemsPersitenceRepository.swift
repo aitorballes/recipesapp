@@ -19,18 +19,24 @@ struct ItemsPersistenceRepository: ItemsPersistenceRepositoryProtocol {
     
     func markAsDeleted(_ item: ItemModel) throws(PersistanceError) {
         do {
+            AppLogger.shared.info("Marking item as deleted: \(item.name)")
             item.isErased = true
             try modelContext.save()
+            AppLogger.shared.info("Item marked as deleted successfully")
         } catch {
+            AppLogger.shared.error("Error marking item as deleted: \(error.localizedDescription)")
             throw .updateFailed
         }
     }
 
     func restore(_ item: ItemModel) throws(PersistanceError) {
         do {
+            AppLogger.shared.info("Restoring item: \(item.name)")
             item.isErased = false
             try modelContext.save()
+            AppLogger.shared.info("Item restored successfully")
         } catch {
+            AppLogger.shared.error("Error restoring item: \(error.localizedDescription)")
             throw .updateFailed
         }
     }
