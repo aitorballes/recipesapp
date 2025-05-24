@@ -60,3 +60,13 @@ extension RecipeModel {
     }
 
 }
+
+extension MealModel {
+    static var testData: MealModel {
+        .init(
+            id: 1,
+            date: Date(),
+            recipe: RecipeModel.testData)
+    }
+            
+}

@@ -10,10 +10,10 @@ final class MealsViewModel: BaseViewModelProtocol {
     var selectedDate = Date()
     var selectedRecipe: RecipeModel? 
     
-    init(modelContext: ModelContext){
+    init(modelContext: ModelContext, repository: (any MealsPersistenceRepositoryProtocol)? = nil) {
         self.modelContext = modelContext
         
-        repository = MealsPersistenceRepository(modelContext: modelContext)
+        self.repository = repository ?? MealsPersistenceRepository(modelContext: modelContext)
         state = .loaded
     }
     
