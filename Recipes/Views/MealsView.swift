@@ -6,6 +6,8 @@ struct MealsView: View {
     @Query() private var meals: [MealModel]
     @Query() private var recipes: [RecipeModel]
 
+    @State private var showRecipeSheet = false
+
     var body: some View {
         @Bindable var viewModelBindable: MealsViewModel = viewModel
         NavigationStack {
@@ -17,16 +19,24 @@ struct MealsView: View {
                         displayedComponents: .date
                     )
 
-                    Picker(
-                        "🍽️ Recipe",
-                        selection: $viewModelBindable.selectedRecipe
-                    ) {
-                        Text("Select a recipe")
-                            .tag(nil as RecipeModel?)
-                        ForEach(recipes) { recipe in
-                            Text(recipe.name)
-                                .tag(recipe as RecipeModel?)
+                    HStack {
+                        Text("🍽️ Recipe")
+                        Spacer()
+                        Button {
+                            showRecipeSheet = true
+                        } label: {
+                            if let recipe = viewModel.selectedRecipe {
+                                Text(recipe.name)
+                                    .foregroundColor(.primary)
+                            } else {
+                                Text("Select a recipe")
+                                    .foregroundColor(.secondary)
+                            }
+                            Image(systemName: "chevron.up.chevron.down")
+                                .foregroundColor(.secondary)
+
                         }
+                        .buttonStyle(.plain)
                     }
 
                     Button("Add to plan") {
@@ -44,7 +54,9 @@ struct MealsView: View {
                         ContentUnavailableView(
                             "No Meals",
                             systemImage: "calendar",
-                            description: Text("There is no meals available. Please try to add some.")
+                            description: Text(
+                                "There is no meals available. Please try to add some."
+                            )
                         )
                     } else {
 
@@ -58,7 +70,10 @@ struct MealsView: View {
                                     Button(role: .destructive) {
                                         viewModel.deleteMeal(meal)
                                     } label: {
-                                        Label("Delete",systemImage: "trash.fill")
+                                        Label(
+                                            "Delete",
+                                            systemImage: "trash.fill"
+                                        )
                                     }
                                 }
                             }
@@ -67,7 +82,6 @@ struct MealsView: View {
                 } header: {
                     Text("Your weekly plan")
                 }
-
             }
             .navigationTitle("Meals Planner")
             .navigationDestination(for: RecipeModel.self) { recipe in
@@ -78,7 +92,39 @@ struct MealsView: View {
                     ProgressView()
                         .progressViewStyle(.circular)
                         .padding()
-                } 
+                }
+            }
+            .sheet(isPresented: $showRecipeSheet) {
+                List {
+                    Button {
+                        viewModel.selectedRecipe = nil
+                        showRecipeSheet = false
+                    } label: {
+                        Text("Select a recipe")
+                            .foregroundColor(.secondary)
+                    }
+
+                    ForEach(recipes) { recipe in
+                        Button {
+                            viewModel.selectedRecipe = recipe
+                            showRecipeSheet = false
+                        } label: {
+                            HStack {
+
+                                Text(recipe.name)
+                                if viewModel.selectedRecipe == recipe {
+                                    Spacer()
+                                    Image(systemName: "checkmark")
+                                        .foregroundColor(.accentColor)
+                                }
+                            }
+                        }
+                    }
+                }
+                .scrollIndicators(.hidden)
+                .listStyle(.plain)
+                .buttonStyle(.plain)
+                .presentationDetents([.medium, .large])
             }
         }
     }
