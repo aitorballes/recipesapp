@@ -2,14 +2,17 @@ import Foundation
 import SwiftData
 
 @Observable
-final class ShoppingListViewModel {
+final class ShoppingListViewModel:  BaseViewModelProtocol {
     private let repository: any ItemsPersistenceRepositoryProtocol
     private let modelContext: ModelContext
+    
+    var state: ViewState = .loading
     var newItemName: String = ""
 
     init(modelContext: ModelContext) {
         self.modelContext = modelContext
         repository = ItemsPersistenceRepository(modelContext: modelContext)
+        state = .loaded
     }
 
     func addItem() {
@@ -19,6 +22,7 @@ final class ShoppingListViewModel {
             newItemName = ""
 
         } catch {
+            state = .error(error)
             print("Error adding item: \(error.localizedDescription)")
         }
     }
@@ -32,6 +36,7 @@ final class ShoppingListViewModel {
             }
 
         } catch {
+            state = .error(error)
             print("Error deleting item: \(error.localizedDescription)")
         }
     }
@@ -40,6 +45,7 @@ final class ShoppingListViewModel {
         do {
             try repository.restore(item)
         } catch {
+            state = .error(error)
             print("Error restoring item: \(error.localizedDescription)")
         }
     }

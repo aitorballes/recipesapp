@@ -94,8 +94,6 @@ struct RecipesView: View {
             } message: {
                Text(viewModel.errorMessage)
             }
-
-            
         }
     }
 }

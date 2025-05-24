@@ -61,7 +61,6 @@ struct MealsView: View {
                                         Label("Delete",systemImage: "trash.fill")
                                     }
                                 }
-
                             }
                         }
                     }
@@ -73,6 +72,13 @@ struct MealsView: View {
             .navigationTitle("Meals Planner")
             .navigationDestination(for: RecipeModel.self) { recipe in
                 RecipeDetailView(recipe: recipe)
+            }
+            .overlay {
+                if case .loading = viewModel.state {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .padding()
+                } 
             }
         }
     }

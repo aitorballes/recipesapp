@@ -2,10 +2,11 @@ import Foundation
 import SwiftData
 
 @Observable
-final class MealsViewModel {
+final class MealsViewModel: BaseViewModelProtocol {
     private let repository: any MealsPersistenceRepositoryProtocol
     private let modelContext: ModelContext
     
+    var state: ViewState = .loading
     var selectedDate = Date()
     var selectedRecipe: RecipeModel? 
     
@@ -13,6 +14,7 @@ final class MealsViewModel {
         self.modelContext = modelContext
         
         repository = MealsPersistenceRepository(modelContext: modelContext)
+        state = .loaded
     }
     
     func addMeal(){
@@ -22,6 +24,7 @@ final class MealsViewModel {
             self.selectedRecipe = nil
         
         } catch {
+            state = .error(error)
             print("Error adding meal: \(error.localizedDescription)")
         }
     }
@@ -30,6 +33,7 @@ final class MealsViewModel {
         do {
             try repository.delete(meal)
         } catch {
+            state = .error(error)
             print("Error deleting meal: \(error.localizedDescription)")
         }
     }

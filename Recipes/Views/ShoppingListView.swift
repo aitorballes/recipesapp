@@ -58,7 +58,21 @@ struct ShoppingListView: View {
                             "There is no items available. Please try to add some."
                         ))
                 }
+                
+                if case .loading = viewModel.state {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .padding()
+                }
             }
+            .alert("Error", isPresented: Binding<Bool>(
+                get: { viewModelBindable.showError },
+                set: { _ in viewModelBindable.state = .loaded }
+              )) {
+                
+            } message: {
+               Text(viewModel.errorMessage)
+            } 
 
         }
     }
