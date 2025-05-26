@@ -17,14 +17,14 @@ final class MockMealsPersistenceRepository: MealsPersistenceRepositoryProtocol {
     func add(_ mealDate: Date, _ recipe: RecipeModel) throws {
         addCalled = true
         if shouldThrowOnAdd {
-            throw PersistanceError.insertFailed
+            throw PersistenceError.insertFailed
         }
     }
     
     func delete(_ item: MealModel) throws {
         deleteCalled = true
         if shouldThrowOnDelete {
-            throw PersistanceError.deleteFailed
+            throw PersistenceError.deleteFailed
         }
     }
 }

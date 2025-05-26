@@ -33,7 +33,7 @@ struct MealsViewModelTests {
         
         #expect(mockRepo.addCalled)
         #expect(viewModel.selectedRecipe != nil)
-        #expect(viewModel.state == .error(PersistanceError.insertFailed))
+        #expect(viewModel.state == .error(PersistenceError.insertFailed))
     }
     
     @Test("[addMeal] Does nothing if no recipe is selected")
@@ -71,6 +71,6 @@ struct MealsViewModelTests {
         viewModel.deleteMeal(meal)
         
         #expect(mockRepo.deleteCalled)
-        #expect(viewModel.state == .error(PersistanceError.deleteFailed))
+        #expect(viewModel.state == .error(PersistenceError.deleteFailed))
     }
 }

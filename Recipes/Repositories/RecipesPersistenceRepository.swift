@@ -31,15 +31,15 @@ struct RecipesPersistenceRepository: RecipesPersistenceRepositoryProtocol {
         return try fetchAll(#Predicate { $0.isSaved == true },[SortDescriptor(\RecipeModel.name, order: .forward)])
     }
 
-    func toggleFavorite(_ recipe: RecipeModel) throws(PersistanceError) {
+    func toggleFavorite(_ recipe: RecipeModel) throws(PersistenceError) {
         try toggleAttribute(for: recipe, keyPath: \.isFavorite)
     }
 
-    func toggleSaved(_ recipe: RecipeModel) throws(PersistanceError) {
+    func toggleSaved(_ recipe: RecipeModel) throws(PersistenceError) {
         try toggleAttribute(for: recipe, keyPath: \.isSaved)
     }
 
-    private func toggleAttribute(for recipe: RecipeModel, keyPath: ReferenceWritableKeyPath<RecipeModel, Bool>) throws(PersistanceError) {
+    private func toggleAttribute(for recipe: RecipeModel, keyPath: ReferenceWritableKeyPath<RecipeModel, Bool>) throws(PersistenceError) {
         do {
             AppLogger.shared.info("Toggling attribute \(keyPath.debugDescription) for recipe: \(recipe.name)")
             recipe[keyPath: keyPath].toggle()

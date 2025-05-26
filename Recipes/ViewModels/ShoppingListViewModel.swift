@@ -9,9 +9,9 @@ final class ShoppingListViewModel:  BaseViewModelProtocol {
     var state: ViewState = .loading
     var newItemName: String = ""
 
-    init(modelContext: ModelContext) {
+    init(modelContext: ModelContext, repository: (any ItemsPersistenceRepositoryProtocol)? = nil) {
         self.modelContext = modelContext
-        repository = ItemsPersistenceRepository(modelContext: modelContext)
+        self.repository = repository ?? ItemsPersistenceRepository(modelContext: modelContext)
         state = .loaded
     }
 

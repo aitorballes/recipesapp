@@ -15,7 +15,7 @@ protocol BasePersistenceRepositoryProtocol {
 
 extension BasePersistenceRepositoryProtocol {
 
-    func insert(_ item: ModelType) throws(PersistanceError) {
+    func insert(_ item: ModelType) throws(PersistenceError) {
         do {
             AppLogger.shared.info("Inserting item:")
             modelContext.insert(item)
@@ -23,11 +23,11 @@ extension BasePersistenceRepositoryProtocol {
             AppLogger.shared.info("Item inserted successfully")            
         } catch {
             AppLogger.shared.error("Error inserting item: \(error.localizedDescription)")
-            throw PersistanceError.insertFailed
+            throw PersistenceError.insertFailed
         }
     }
 
-    func delete(_ item: ModelType) throws(PersistanceError) {
+    func delete(_ item: ModelType) throws(PersistenceError) {
         do {
             AppLogger.shared.info("Deleting item:")
             modelContext.delete(item)
@@ -40,7 +40,7 @@ extension BasePersistenceRepositoryProtocol {
         }
     }
     
-    func fetchAll(_ predicate: Predicate<ModelType>? = nil,_ sortBy: [SortDescriptor<ModelType>]? = []) throws(PersistanceError) -> [ModelType] {
+    func fetchAll(_ predicate: Predicate<ModelType>? = nil,_ sortBy: [SortDescriptor<ModelType>]? = []) throws(PersistenceError) -> [ModelType] {
         do {
             let descriptor = FetchDescriptor<ModelType>(
                 predicate: predicate,
@@ -61,7 +61,7 @@ extension BasePersistenceRepositoryProtocol {
             return try modelContext.fetchCount(descriptor)
         } catch {
             AppLogger.shared.error("Error fetching count: \(error.localizedDescription)")
-            throw PersistanceError.fetchFailed
+            throw PersistenceError.fetchFailed
         }
     }
 

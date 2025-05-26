@@ -1,6 +1,6 @@
 import Foundation
 
-enum PersistanceError: Error, LocalizedError {
+enum PersistenceError: Error, LocalizedError {
     case fetchFailed
     case deleteFailed
     case updateFailed

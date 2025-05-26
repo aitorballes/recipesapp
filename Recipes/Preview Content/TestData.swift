@@ -70,3 +70,15 @@ extension MealModel {
     }
             
 }
+
+extension ItemModel {
+    static var testData: ItemModel {
+        .init(
+            id: 1,
+            name: "Test Item",
+            isErased: false
+        )
+    }
+}
+            
+

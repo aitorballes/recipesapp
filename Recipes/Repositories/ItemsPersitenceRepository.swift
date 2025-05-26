@@ -17,7 +17,7 @@ struct ItemsPersistenceRepository: ItemsPersistenceRepositoryProtocol {
         try insert(newItem)
     }
     
-    func markAsDeleted(_ item: ItemModel) throws(PersistanceError) {
+    func markAsDeleted(_ item: ItemModel) throws(PersistenceError) {
         do {
             AppLogger.shared.info("Marking item as deleted: \(item.name)")
             item.isErased = true
@@ -29,7 +29,7 @@ struct ItemsPersistenceRepository: ItemsPersistenceRepositoryProtocol {
         }
     }
 
-    func restore(_ item: ItemModel) throws(PersistanceError) {
+    func restore(_ item: ItemModel) throws(PersistenceError) {
         do {
             AppLogger.shared.info("Restoring item: \(item.name)")
             item.isErased = false
