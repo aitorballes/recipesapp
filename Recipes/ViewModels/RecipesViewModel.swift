@@ -61,19 +61,10 @@ final class RecipesViewModel: BaseViewModelProtocol {
     }
 
     func saveRecipe(_ recipe: RecipeModel) {
-        do {
-            try repository.toggleSaved(recipe)
-            
-        } catch {
-            state = .error(error)
-        }
+        recipe.isSaved.toggle()
     }
     
     func favRecipe(_ recipe: RecipeModel) {
-        do {
-            try repository.toggleFavorite(recipe)        
-        } catch {
-            state = .error(error)
-        }
+        recipe.isFavorite.toggle()
     }
 }

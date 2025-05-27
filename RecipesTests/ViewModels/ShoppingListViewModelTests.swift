@@ -54,7 +54,6 @@ struct ShoppingListViewModelTests {
         viewModel.deleteItem(item)
         
         #expect(mockRepo.deleteCalled)
-        #expect(!mockRepo.markAsDeletedCalled)
         #expect(viewModel.state == .loaded)
     }
 
@@ -67,7 +66,7 @@ struct ShoppingListViewModelTests {
         viewModel.deleteItem(item)
         
         #expect(!mockRepo.deleteCalled)
-        #expect(mockRepo.markAsDeletedCalled)
+        #expect(item.isErased)
         #expect(viewModel.state == .loaded)
     }
 
@@ -85,45 +84,18 @@ struct ShoppingListViewModelTests {
         #expect(viewModel.state == .error(PersistenceError.deleteFailed))
     }
     
-    @Test("[deleteItem] Fails to mark as delete and sets the state to error")
-    func testMarkAsDeleteItemFailure() {
-        let mockRepo = MockItemsPersistenceRepository(modelContext: modelContext)
-        mockRepo.shouldThrowOnMarkAsDeleted = true
-        let viewModel = ShoppingListViewModel(modelContext: modelContext, repository: mockRepo)
-        let item = ItemModel.testData
-
-        viewModel.deleteItem(item)
-        
-        #expect(mockRepo.markAsDeletedCalled)
-        #expect(viewModel.state == .error(PersistenceError.updateFailed))
-    }
+    
 
     @Test("[restoreItem] Restores an item successfully")
     func testRestoreItemSuccess() {
         let mockRepo = MockItemsPersistenceRepository(modelContext: modelContext)
         let viewModel = ShoppingListViewModel(modelContext: modelContext, repository: mockRepo)
         let item = ItemModel.testData
-
-        viewModel.restoreItem(item)
-        
-        #expect(mockRepo.restoreCalled)
-        #expect(viewModel.state == .loaded)
-    }
-
-    @Test("[restoreItem] Fails to restore and sets the state to error")
-    func testRestoreItemFailure() {
-        let mockRepo = MockItemsPersistenceRepository(modelContext: modelContext)
-        mockRepo.shouldThrowOnRestore = true
-        let viewModel = ShoppingListViewModel(modelContext: modelContext, repository: mockRepo)
-        let item = ItemModel.testData
         item.isErased = true
-
         viewModel.restoreItem(item)
         
-        #expect(mockRepo.restoreCalled)
-        #expect(viewModel.state == .error(PersistenceError.updateFailed))
-    }
-
-        
+        #expect(!item.isErased)
+        #expect(viewModel.state == .loaded)
+    }        
 }
 

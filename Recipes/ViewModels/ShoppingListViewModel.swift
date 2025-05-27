@@ -30,8 +30,9 @@ final class ShoppingListViewModel:  BaseViewModelProtocol {
         do {
             if item.isErased {               
                 try repository.delete(item)
+                
             } else {
-                try repository.markAsDeleted(item)
+                item.isErased = true                
             }
 
         } catch {
@@ -40,10 +41,6 @@ final class ShoppingListViewModel:  BaseViewModelProtocol {
     }
 
     func restoreItem(_ item: ItemModel) {
-        do {
-            try repository.restore(item)
-        } catch {
-            state = .error(error)
-        }
+        item.isErased = false
     }
 }
