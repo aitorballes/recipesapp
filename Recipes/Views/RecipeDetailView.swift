@@ -5,7 +5,7 @@ struct RecipeDetailView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
-                CustomImageView(
+                CachedImageView(
                     imageUrl: recipe.image, size: 200, contentMode: .fill
                 )
                 .shadow(color: .black.opacity(0.4), radius: 7, y: 7)

@@ -11,7 +11,7 @@ struct RecipeRowView: View {
     
     var body: some View {
         HStack (alignment: .top, spacing: 10) {
-            CustomImageView(imageUrl: recipe.image)
+            CachedImageView(imageUrl: recipe.image)
             
             VStack (alignment: .leading, spacing: 10) {
                 Text(recipe.name)
